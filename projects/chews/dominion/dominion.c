@@ -111,16 +111,16 @@ int initializeGame(int numPlayers, int kingdomCards[10], int randomSeed,
         {
           //check if card is a 'Victory' Kingdom card
           if (kingdomCards[j] == great_hall || kingdomCards[j] == gardens)
-        {
-          if (numPlayers == 2){ 
-            state->supplyCount[i] = 8; 
+          {
+            if (numPlayers == 2){ 
+              state->supplyCount[i] = 8; 
+            }
+            else{ state->supplyCount[i] = 12; }
           }
-          else{ state->supplyCount[i] = 12; }
-        }
           else
-        {
-          state->supplyCount[i] = 10;
-        }
+          {
+            state->supplyCount[i] = 10;
+          }
           break;
         }
       else    //card is not in the set choosen for the game

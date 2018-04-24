@@ -25,20 +25,22 @@ testAll: dominion.o testSuite.c
 interface.o: interface.h interface.c
 	gcc -c interface.c -g  $(CFLAGS)
 
-#runtests: testDrawCard 
-#	./testDrawCard &> unittestresult.out
-#	gcov dominion.c >> unittestresult.out
-#	cat dominion.c.gcov >> unittestresult.out
+runtests: testDrawCard 
+	./testDrawCard &> unittestresult.out
+	gcov dominion.c >> unittestresult.out
+	cat dominion.c.gcov >> unittestresult.out
 
-unittestresults.out: unittest1.c dominion.o
+unittestresults.out: unittest1.c dominion.o interface.o
 	echo "   CS362 Spring 2018: Chews" > unittestresults.out
 	echo "-------------------------------" >> unittestresults.out
 	echo "Assignment-3 Unit Tests Results" >> unittestresults.out
 	
 	echo "unittest1.c:" >> unittestresults.out
-	gcc -o unittest1 unittest1.c -g dominion.o rngs.o $(CFLAGS)
+	gcc -o unittest1 unittest1.c -g dominion.o rngs.o interface.o $(CFLAGS)
 	unittest1 >> unittestresults.out
 	gcov dominion.c >> unittestresults.out
+	
+	cat unittestresults.out
 	
 
 player: player.c interface.o
