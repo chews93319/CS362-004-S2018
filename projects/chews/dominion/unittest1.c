@@ -21,7 +21,7 @@
 #define NOISY1 1
 
 //function prototypes
-void assertTrue(int lefty, int righty);
+int asserttrue(int lefty, int righty);
 void printSupplySet(struct gameState* g);
 void printCardSet(int player, struct gameState* g);
 
@@ -32,9 +32,9 @@ void printCardSet(int player, struct gameState* g);
  */
 int main(int argc, char** argv) {
     
-#if (NOISY1 == 1)
+//#if (NOISY1 == 1)
     printf("*** Start of Unit Test 1 ***\n");
-#endif
+//#endif
     
     int i, p;
     int r;
@@ -46,7 +46,7 @@ int main(int argc, char** argv) {
                 remodel, smithy, village, baron, great_hall};
     struct gameState G;
     
-    
+    int failqty = 0;
     
     // clear the game state memory space
     memset(&G, 23, sizeof(struct gameState));
@@ -72,13 +72,17 @@ int main(int argc, char** argv) {
         who = i % 2;
         startDiscard = G.discardCount[who];
         
+#if (NOISY1 == 1)
         printf("player%d gain Smithy...\n",who);
+#endif
         r = gainCard(smithy, &G, optDest, who);
-        assertTrue(r,0);
+        failqty += asserttrue(r,0);
         
+#if (NOISY1 == 1)
         printf("to discard pile.\n");
-        assertTrue(startDiscard + 1, G.discardCount[who]);
-        assertTrue(smithy, G.discard[who][startDiscard]);
+#endif
+        failqty += asserttrue(startDiscard + 1, G.discardCount[who]);
+        failqty += asserttrue(smithy, G.discard[who][startDiscard]);
         
         //test values of toFlag other than the set {1,2}
         if (i == startSupply - 1){
@@ -95,13 +99,17 @@ int main(int argc, char** argv) {
         who = i % 2;
         startDeck = G.deckCount[who];
         
+#if (NOISY1 == 1)
         printf("player%d gain Adventurer...\n",who);
+#endif
         r = gainCard(adventurer, &G, optDest, who);
-        assertTrue(r,0);
+        failqty += asserttrue(r,0);
         
+#if (NOISY1 == 1)
         printf("to draw pile (deck).\n");
-        assertTrue(startDeck + 1, G.deckCount[who]);
-        assertTrue(adventurer, G.deck[who][startDeck]);
+#endif
+        failqty += asserttrue(startDeck + 1, G.deckCount[who]);
+        failqty += asserttrue(adventurer, G.deck[who][startDeck]);
     }
     
     /*Gain one Gold Card into each Player Hands (last position)*/
@@ -111,20 +119,43 @@ int main(int argc, char** argv) {
         who = i % 2;
         startHand = G.handCount[who];
         
+#if (NOISY1 == 1)
         printf("player%d gain Gold...\n",who);
+#endif
         r = gainCard(gold, &G, optDest, who);
-        assertTrue(r,0);
+        failqty += asserttrue(r,0);
         
+#if (NOISY1 == 1)
         printf("to hand.\n");
-        assertTrue(startHand + 1, G.handCount[who]);
-        assertTrue(gold, G.hand[who][startHand]);
+#endif
+        failqty += asserttrue(startHand + 1, G.handCount[who]);
+        failqty += asserttrue(gold, G.hand[who][startHand]);
     }
     
     /*Fail Gain one Smithy for Player0 (empty supply)*/
     who = 0;
+#if (NOISY1 == 1)
     printf("player%d fail to gain Smithy (none left).\n",who);
+#endif
     r = gainCard(smithy, &G, 2, who);
-    assertTrue(-1, r);
+    failqty += asserttrue(-1, r);
+    
+    /*Fail Gain Illegal Supply Card Value*/
+    who = 0;
+#if (NOISY1 == 1)
+    printf("player%d fail to gain Illegal Supply Card.\n",who);
+#endif
+    r = gainCard(57, &G, 2, who);
+    failqty += asserttrue(-1, r);
+    
+    /*Fail Gain to illegal player*/
+    who = 5;
+#if (NOISY1 == 1)
+    printf("(illegal) player%d fail to gain Mine Card.\n",who);
+#endif
+    r = gainCard(mine, &G, 2, who);
+    failqty += asserttrue(-1, r);
+    
     
 #if (NOISY1 == 1)
     printf("\n\n");
@@ -134,6 +165,12 @@ int main(int argc, char** argv) {
         printCardSet(p, &G);
     }
 #endif
+    
+    if (failqty > 0){
+        printf("TEST FAILED: %d instances\n", failqty);
+    } else {
+        printf("TEST SUCCESSFULLY COMPLETED\n");
+    }
     
     
 #if (NOISY1 == 1)
@@ -147,10 +184,15 @@ int main(int argc, char** argv) {
 /*
  *
  */
-void assertTrue(int lefty, int righty) {
+int asserttrue(int lefty, int righty) {
     if (lefty != righty){
-        printf("Assert Failed:  %d != %d\n", lefty, righty);
+#if (NOISY1 == 1)
+        printf("-->  Assert Failed:  %d != %d\n", lefty, righty);
+#endif
+        return 1;
     }
+    
+    return 0;
 }
 
 /*
