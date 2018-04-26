@@ -30,14 +30,19 @@ runtests: testDrawCard
 	gcov dominion.c >> unittestresult.out
 	cat dominion.c.gcov >> unittestresult.out
 
-unittestresults.out: unittest1.c dominion.o interface.o
+unittestresults.out: unittest2.c unittest1.c dominion.o interface.o
 	echo "   CS362 Spring 2018: Chews" > unittestresults.out
 	echo "-------------------------------" >> unittestresults.out
 	echo "Assignment-3 Unit Tests Results" >> unittestresults.out
 	
-	echo "unittest1.c:" >> unittestresults.out
-	gcc -o unittest1 unittest1.c -g dominion.o rngs.o interface.o $(CFLAGS)
-	unittest1 >> unittestresults.out
+	#echo "unittest1.c:" >> unittestresults.out
+	#gcc -o unittest1 unittest1.c -g dominion.o rngs.o interface.o $(CFLAGS)
+	#unittest1 >> unittestresults.out
+	#gcov dominion.c >> unittestresults.out
+	
+	echo "unittest2.c:" >> unittestresults.out
+	gcc -o unittest2 unittest2.c -g dominion.o rngs.o interface.o $(CFLAGS)
+	unittest2 >> unittestresults.out
 	gcov dominion.c >> unittestresults.out
 	
 	cat unittestresults.out
@@ -49,4 +54,6 @@ player: player.c interface.o
 all: playdom player 
 
 clean:
-	rm -f *.o playdom.exe playdom player player.exe  *.gcov *.gcda *.gcno *.so *.out testDrawCard testDrawCard.exe unittest1
+	rm -f *.o *.gcov *.gcda *.gcno *.so *.out
+	rm -f playdom playdom.exe player player.exe testDrawCard testDrawCard.exe
+	rm -f unittest1 unittest2
