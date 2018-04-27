@@ -17,8 +17,8 @@
 #include "interface.h"
 
 
-//set NOISY1 to 0 to remove printfs from output
-#define NOISY1 1
+//set NOISY2 to 0 to remove printfs from output
+#define NOISY2 1
 
 //function prototypes
 int asserttrue(int lefty, int righty);
@@ -32,7 +32,7 @@ void printCardSet(int player, struct gameState* g);
  */
 int main(int argc, char** argv) {
     
-//#if (NOISY1 == 1)
+//#if (NOISY2 == 1)
     printf("*** Start of Unit Test 2 ***\n");
 //#endif
     
@@ -54,7 +54,7 @@ int main(int argc, char** argv) {
     // initialize a new game
     r = initializeGame(numPlayer, k, seed, &G);
     
-#if (NOISY1 == 1)
+#if (NOISY2 == 1)
     if (r >= 0) printf("Game Initialized\n\n");
     
     printSupplySet(&G);
@@ -88,7 +88,7 @@ int main(int argc, char** argv) {
     
 /*    
 */    
-#if (NOISY1 == 1)
+#if (NOISY2 == 1)
     printf("\n\n");
     printSupplySet(&G);
     
@@ -107,7 +107,7 @@ int main(int argc, char** argv) {
     }
     
     
-#if (NOISY1 == 1)
+#if (NOISY2 == 1)
     printf("*** End of Unit Test 2 ***\n");
 #endif
     
@@ -120,7 +120,7 @@ int main(int argc, char** argv) {
  */
 int asserttrue(int lefty, int righty) {
     if (lefty != righty){
-#if (NOISY1 == 1)
+#if (NOISY2 == 1)
         printf("-->  Assert Failed:  %d != %d\n", lefty, righty);
 #endif
         return 1;
