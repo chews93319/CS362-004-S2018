@@ -241,7 +241,18 @@ int main(int argc, char** argv) {
         qtyGardens += 1;
         
         //change a copper at pos j to garden
-        G.deck[who][i] = optCard;
+        if (who % 2){
+            //player1 
+            G.deck[who][i] = optCard;
+        } else {
+            //player0
+            optDest = i % 3;
+            switch (optDest) {
+                case 0: G.deck[who][i/3] = optCard;break;
+                case 1: G.hand[who][i/3] = optCard;break;
+                case 2: G.discard[who][i/3] = optCard;break;
+            }
+        }
         
         
         //calculate the card quantity in player's piles
@@ -264,8 +275,20 @@ int main(int argc, char** argv) {
     
     //change all garden cards to coppers
     for (who=0; who<numPlayer; who++){
+        //remove all gardens before adding another card
         for (i = 0; i < 4; i++){
-            G.deck[who][i] = copper;
+            if (who % 2){
+                //player1
+                G.deck[who][i] = copper;
+            } else {
+                //player0
+                optDest = i % 3;
+                switch (optDest) {
+                    case 0: G.deck[who][i/3] = copper;break;
+                    case 1: G.hand[who][i/3] = copper;break;
+                    case 2: G.discard[who][i/3] = copper;break;
+                }
+            }
         }
     }
     
@@ -301,7 +324,19 @@ int main(int argc, char** argv) {
                 //increment garden quantity and test scoreFor
                 for (i = 0; i < 4; i++){
                     qtyGardens = i + 1;
-                    G.deck[who][i] = gardens;
+                    //change a copper at pos i to garden
+                    if (who % 2){
+                        //player1 
+                        G.deck[who][i] = gardens;
+                    } else {
+                        //player0
+                        optDest = i % 3;
+                        switch (optDest) {
+                            case 0: G.deck[who][i/3] = gardens;break;
+                            case 1: G.hand[who][i/3] = gardens;break;
+                            case 2: G.discard[who][i/3] = gardens;break;
+                        }
+                    }
                     
                     
                     //calculate the card quantity in player's piles
@@ -322,7 +357,18 @@ int main(int argc, char** argv) {
                 
                 //remove all gardens before adding another card
                 for (i = 0; i < 4; i++){
-                    G.deck[who][i] = optCard;
+                    if (who % 2){
+                        //player1
+                        G.deck[who][i] = optCard;
+                    } else {
+                        //player0
+                        optDest = i % 3;
+                        switch (optDest) {
+                            case 0: G.deck[who][i/3] = optCard;break;
+                            case 1: G.hand[who][i/3] = optCard;break;
+                            case 2: G.discard[who][i/3] = optCard;break;
+                        }
+                    }
                 }
                 qtyGardens = 0;
             }

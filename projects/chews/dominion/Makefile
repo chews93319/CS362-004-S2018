@@ -53,7 +53,7 @@ unittestresults.out: unittest2.c unittest1.c dominion.o interface.o
 	echo "unittest4.c:" >> unittestresults.out
 	gcc -o unittest4 unittest4.c -g dominion.o rngs.o interface.o $(CFLAGS)
 	unittest4 >> unittestresults.out
-	gcov dominion.c >> unittestresults.out
+	gcov -b dominion.c >> unittestresults.out
 	
 	cat unittestresults.out
 	
