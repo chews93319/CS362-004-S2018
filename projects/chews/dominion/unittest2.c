@@ -33,14 +33,15 @@ void printCardSet(int player, struct gameState* g);
 int main(int argc, char** argv) {
     
 //#if (NOISY2 == 1)
-    printf("*** Start of Unit Test 2 ***\n");
+//    printf("*** Start of Unit Test 2 ***\n");
 //#endif
     
-    int i, p;
+    //int i;
+    int p;
     int r;
     int seed = 1000;
     int numPlayer = 2;
-    int who;
+    //int who;
     
     int k[10] = {adventurer, council_room, feast, gardens, mine,
                 remodel, smithy, village, baron, great_hall};
@@ -53,11 +54,14 @@ int main(int argc, char** argv) {
     
     // initialize a new game
     r = initializeGame(numPlayer, k, seed, &G);
+    if (r!=0){
+        return -1;
+    }
     
 #if (NOISY2 == 1)
-    if (r >= 0) printf("Game Initialized\n\n");
+    //if (r >= 0) printf("Game Initialized\n\n");
     
-    printSupplySet(&G);
+    //printSupplySet(&G);
     
     printf("\n");
     printf("Whose Turn: %d\n", G.whoseTurn);
@@ -90,14 +94,14 @@ int main(int argc, char** argv) {
 */    
 #if (NOISY2 == 1)
     printf("\n\n");
-    printSupplySet(&G);
+    //printSupplySet(&G);
     
     printf("\nWhose Turn: %d\n", G.whoseTurn);
     printf("Coin Qty: %d\n", G.coins);
     
-    for (p=0;p<numPlayer;p++){
-        printCardSet(p, &G);
-    }
+    //for (p=0;p<numPlayer;p++){
+    //    printCardSet(p, &G);
+    //}
 #endif
     
     if (failqty > 0){
@@ -107,9 +111,9 @@ int main(int argc, char** argv) {
     }
     
     
-#if (NOISY2 == 1)
-    printf("*** End of Unit Test 2 ***\n");
-#endif
+//#if (NOISY2 == 1)
+//    printf("*** End of Unit Test 2 ***\n");
+//#endif
     
     return (EXIT_SUCCESS);
 }

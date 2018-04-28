@@ -35,20 +35,20 @@ unittestresults.out: unittest2.c unittest1.c dominion.o interface.o
 	echo "-------------------------------" >> unittestresults.out
 	echo "Assignment-3 Unit Tests Results" >> unittestresults.out
 	
-	#echo "unittest1.c:" >> unittestresults.out
-	#gcc -o unittest1 unittest1.c -g dominion.o rngs.o interface.o $(CFLAGS)
-	#unittest1 >> unittestresults.out
-	#gcov dominion.c >> unittestresults.out
+	echo "unittest1.c:" >> unittestresults.out
+	gcc -o unittest1 unittest1.c -g dominion.o rngs.o interface.o $(CFLAGS)
+	unittest1 >> unittestresults.out
+	gcov dominion.c >> unittestresults.out
 	
-	#echo "unittest2.c:" >> unittestresults.out
-	#gcc -o unittest2 unittest2.c -g dominion.o rngs.o interface.o $(CFLAGS)
-	#unittest2 >> unittestresults.out
-	#gcov dominion.c >> unittestresults.out
+	echo "unittest2.c:" >> unittestresults.out
+	gcc -o unittest2 unittest2.c -g dominion.o rngs.o interface.o $(CFLAGS)
+	unittest2 >> unittestresults.out
+	gcov dominion.c >> unittestresults.out
 	
-	#echo "unittest3.c:" >> unittestresults.out
-	#gcc -o unittest3 unittest3.c -g dominion.o rngs.o interface.o $(CFLAGS)
-	#unittest3 >> unittestresults.out
-	#gcov dominion.c >> unittestresults.out
+	echo "unittest3.c:" >> unittestresults.out
+	gcc -o unittest3 unittest3.c -g dominion.o rngs.o interface.o $(CFLAGS)
+	unittest3 >> unittestresults.out
+	gcov dominion.c >> unittestresults.out
 	
 	echo "unittest4.c:" >> unittestresults.out
 	gcc -o unittest4 unittest4.c -g dominion.o rngs.o interface.o $(CFLAGS)

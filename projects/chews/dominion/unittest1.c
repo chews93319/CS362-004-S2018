@@ -33,7 +33,7 @@ void printCardSet(int player, struct gameState* g);
 int main(int argc, char** argv) {
     
 //#if (NOISY1 == 1)
-    printf("*** Start of Unit Test 1 ***\n");
+//    printf("*** Start of Unit Test 1 ***\n");
 //#endif
     
     int i, p;
@@ -53,11 +53,14 @@ int main(int argc, char** argv) {
     
     // initialize a new game
     r = initializeGame(numPlayer, k, seed, &G);
+    if (r!=0){
+        return -1;
+    }
     
 #if (NOISY1 == 1)
-    if (r >= 0) printf("Game Initialized\n\n");
+    //if (r >= 0) printf("Game Initialized\n\n");
     
-    printSupplySet(&G);
+    //printSupplySet(&G);
     
     for (p=0;p<numPlayer;p++){
         printCardSet(p, &G);
@@ -159,7 +162,7 @@ int main(int argc, char** argv) {
     
 #if (NOISY1 == 1)
     printf("\n\n");
-    printSupplySet(&G);
+    //printSupplySet(&G);
     
     for (p=0;p<numPlayer;p++){
         printCardSet(p, &G);
@@ -173,9 +176,9 @@ int main(int argc, char** argv) {
     }
     
     
-#if (NOISY1 == 1)
-    printf("*** End of Unit Test 1 ***\n");
-#endif
+//#if (NOISY1 == 1)
+//    printf("*** End of Unit Test 1 ***\n");
+//#endif
     
     return (EXIT_SUCCESS);
 }
