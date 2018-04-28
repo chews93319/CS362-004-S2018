@@ -68,9 +68,14 @@ int main(int argc, char** argv) {
     //}
 #endif
     
-    int optCard, qtyCard;
+    int optCard;
     int pScore;
     char name[MAX_STRING_LENGTH];
+    // estate = 1
+    // duchy = 2
+    // province = 3
+    // great_hall = 16
+    // curse = 0
     int testCard[] = {1, 2, 3, 16, 0};
     int valCard[] = {1,3,6, 1, -1};
     
@@ -87,6 +92,10 @@ int main(int argc, char** argv) {
     }
     
     
+    #if (NOISY4 == 1)
+    printf("\n  Test with all cards in unique piles\n");
+    printf("---------------------------------------\n");
+    #endif
     
     //Test basic victory cards in single piles    
     //    Loop through: estates, duchys, provinces, great halls, curses
@@ -96,7 +105,6 @@ int main(int argc, char** argv) {
         cardNumToName(optCard, name);
         
         #if (NOISY4 == 1)
-        printf("\n  Test with %s cards \n------------------------------\n", name);
         printf("All of Player 1 cards in deck, including %ss\n", name);
         #endif
         for (j=0;j < 3;j++){
@@ -106,7 +114,7 @@ int main(int argc, char** argv) {
         if(asserttrue(pScore, 3*valCard[i])){
             failqty++;
             #if (NOISY4 == 1)
-            printCardSet(1, &G);
+            //printCardSet(1, &G);
             #endif
         }
         
@@ -122,7 +130,7 @@ int main(int argc, char** argv) {
         if(asserttrue(pScore, 3*valCard[i])){
             failqty++;
             #if (NOISY4 == 1)
-            printCardSet(1, &G);
+            //printCardSet(1, &G);
             #endif
         }
         
@@ -138,7 +146,7 @@ int main(int argc, char** argv) {
         if(asserttrue(pScore, 3*valCard[i])){
             failqty++;
             #if (NOISY4 == 1)
-            printCardSet(1, &G);
+            //printCardSet(1, &G);
             #endif
         }
         
@@ -149,8 +157,18 @@ int main(int argc, char** argv) {
             G.discard[who][j] = -1;
         }
         G.discardCount[who] = 0;
+    
+        #if (NOISY4 == 1)
+        printf("    ********    \n");
+        #endif
         
     }
+    
+    
+    #if (NOISY4 == 1)
+    printf("\n  Test with cards in multiple piles\n");
+    printf("---------------------------------------\n");
+    #endif
     
     
     //Test basic victory cards in multiple piles    
@@ -161,8 +179,7 @@ int main(int argc, char** argv) {
         cardNumToName(optCard, name);
         
         #if (NOISY4 == 1)
-        printf("\n  Test with %s cards \n------------------------------\n", name);
-        printf("Cards spread (1ea) in piles of Player 0, including %ss\n", name);
+        printf("%s Cards spread (1ea) in piles of Player 0\n", name);
         #endif
         
         if (G.handCount[who] >= 1) {
@@ -188,24 +205,132 @@ int main(int argc, char** argv) {
         if(asserttrue(pScore, 3*valCard[i])){
             failqty++;
             #if (NOISY4 == 1)
-            printCardSet(0, &G);
+            //printCardSet(0, &G);
+            #endif
+        }
+        
+        G.hand[who][G.handCount[who]-1] = copper;
+        G.deck[who][G.deckCount[who]-1] = copper;
+        G.discard[who][G.discardCount[who]-1] = copper;
+    }
+    
+    
+    #if (NOISY4 == 1)
+    printf("\n  Test with Garden Cards with static card sets\n");
+    printf("---------------------------------------\n");
+    #endif
+    
+    //Test the Garden Card Calculations
+    //   player0 starting with 11 coppers: 5deck, 5hand, 1discard
+    //   player1 starting with 10 coppers: 10deck
+    optCard = gardens;
+    cardNumToName(optCard, name);
+    int qtyCards;
+    int qtyGardens;
+    int optDest;
+    int prefails = failqty;
+    
+    //evaluating for each player
+    //evaluate for an increasing quantity of garden cards
+    //   changing coppers to gardens in deck, one at a time
+    for (p=0; p<numPlayer; p++){
+        printf("Gardens Player %d\n",p);
+        who = p;
+        qtyGardens = 0;
+    for (i = 0; i < 4; i++){
+        qtyGardens += 1;
+        
+        //change a copper at pos j to garden
+        G.deck[who][i] = optCard;
+        
+        
+        //calculate the card quantity in player's piles
+        qtyCards = G.deckCount[who] + G.handCount[who] + G.discardCount[who];
+        printf("  (int)(qtyCards/10) * qtyGardens:(%d/10)*%d = %d\n",
+                qtyCards, qtyGardens,qtyGardens*(qtyCards / 10));
+
+
+        pScore = scoreFor(who, &G);
+        if(asserttrue(pScore, qtyGardens*(qtyCards / 10))){
+            failqty++;
+            #if (NOISY4 == 1)
+            //printCardSet(who, &G);
             #endif
         }
         
         
+    }   
     }
     
+    //change all garden cards to coppers
+    for (who=0; who<numPlayer; who++){
+        for (i = 0; i < 4; i++){
+            G.deck[who][i] = copper;
+        }
+    }
     
-    
-    
-    
-    
-    
+    //If Preliminary Garden Score Calcs are good
+    if (prefails!=failqty){
+        printf("\n\n  ** Skipped Garden Cards with increasing card sets **\n");
+    } else {
+        #if (NOISY4 == 1)
+        printf("\n  Test with Garden Cards with increasing card sets\n");
+        printf("---------------------------------------\n");
+        #endif
+        
+        printf("\n");
+        optCard = copper;
+        for (who=0; who<numPlayer; who++){
+            //increase player piles up to 30 cards, one at a time
+            //   player0 adding coppers to different piles
+            //   player1 adding coppers to deck pile
+            for (j = 0; j < 30; j++){
+                if (who % 2){
+                    //player1 
+                    G.deck[who][G.deckCount[who]++] = optCard;
+                } else {
+                    //player0
+                    optDest = j % 3;
+                    switch (optDest) {
+                        case 0: G.deck[who][G.deckCount[who]++] = optCard;break;
+                        case 1: G.hand[who][G.handCount[who]++] = optCard;break;
+                        case 2: G.discard[who][G.discardCount[who]++] = optCard;break;
+                    }
+                }
+                
+                //increment garden quantity and test scoreFor
+                for (i = 0; i < 4; i++){
+                    qtyGardens = i + 1;
+                    G.deck[who][i] = gardens;
+                    
+                    
+                    //calculate the card quantity in player's piles
+                    qtyCards = G.deckCount[who] + G.handCount[who] + G.discardCount[who];
+                    printf("  (int)(qtyCards/10) * qtyGardens:(%d/10)*%d = %d\n",
+                            qtyCards, qtyGardens,qtyGardens*(qtyCards / 10));
+
+
+                    pScore = scoreFor(who, &G);
+                    if(asserttrue(pScore, qtyGardens*(qtyCards / 10))){
+                        failqty++;
+                        #if (NOISY4 == 1)
+                        //printCardSet(who, &G);
+                        #endif
+                    }
+                }
+                
+                
+                //remove all gardens before adding another card
+                for (i = 0; i < 4; i++){
+                    G.deck[who][i] = optCard;
+                }
+                qtyGardens = 0;
+            }
+            
+        }
+    }
     
     /*
-    who = 1;
-    optCard = gardens;
-    cardNumToName(optCard, name);
     
     #if (NOISY4 == 1)
     printf("\n  Test with %s cards \n------------------------------\n", name);
