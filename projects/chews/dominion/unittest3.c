@@ -27,7 +27,6 @@ void printSupplySet(struct gameState* g);
 void printCardSet(int player, struct gameState* g);
 
 
-
 /*
  * Unit Test for Function: fullDeckCount
  */
