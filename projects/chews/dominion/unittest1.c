@@ -28,7 +28,7 @@ void printCardSet(int player, struct gameState* g);
 
 
 /*
- * Unit Test for Function: playCard
+ * Unit Test for Function: gainCard
  */
 int main(int argc, char** argv) {
     
