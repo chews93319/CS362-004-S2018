@@ -39,7 +39,7 @@ int main(int argc, char** argv) {
     int newCards = 0;
     int newBuys = 0;
     int played = 1;
-    int extraCoins = 0;
+    //int extraCoins = 0;
     //int shuffledCards = 0;
     
     

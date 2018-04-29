@@ -36,9 +36,9 @@ void printCardSet(int player, struct gameState* g);
  */
 int main(int argc, char** argv) {
     int newCards = 0;
-    int discarded = 0;
+    //int discarded = 0;
     int played = 1;
-    int extraCoins = 0;
+    //int extraCoins = 0;
     //int shuffledCards = 0;
     
     
@@ -54,7 +54,7 @@ int main(int argc, char** argv) {
     int seed = 1000;
     int numPlayer = 2;
     struct gameState G, testG;
-    int optCard, optDest, who;
+    int optCard, who;
     
     int k[10] = {adventurer, council_room, feast, gardens, mine,
                 remodel, smithy, village, baron, great_hall};
@@ -81,13 +81,10 @@ int main(int argc, char** argv) {
     
     
     // prepare the playing hand
-    //    gainCard destination options
-    //      optDest = 0 : add to discard
-    //      optDest = 1 : add to deck
-    //      optDest = 2 : add to hand
+    //    append lastpos hand card to 'top' of deck
+    //    convert lastpos hand card to council_room
     who = 0;
     optCard = smithy;
-    optDest = 2;
     G.deck[who][G.deckCount[who]++] = G.hand[who][G.handCount[who]-1];
     G.hand[who][G.handCount[who]-1] = smithy;
     
@@ -103,7 +100,7 @@ int main(int argc, char** argv) {
     cardEffect(optCard, choice1, choice2, choice3, &testG, handpos, &bonus);
     
     newCards = 3;
-    discarded = 0;
+//    discarded = 0;
     played = 1;
     
     //playedCardCount + 1

@@ -38,12 +38,12 @@ int main(int argc, char** argv) {
     int newCards = 0;
     int newActions = 0;
     int played = 1;
-    int extraCoins = 0;
+    //int extraCoins = 0;
     //int shuffledCards = 0;
     
     
     //int i;
-    int p;
+    //int p;
     int r;
     int handpos = 0;
     int choice1 = 0;
@@ -54,7 +54,7 @@ int main(int argc, char** argv) {
     int seed = 1000;
     int numPlayer = 2;
     struct gameState G, testG;
-    int optCard, optDest, who;
+    int optCard, who;
     
     int k[10] = {adventurer, council_room, feast, gardens, mine,
                 remodel, smithy, village, baron, great_hall};
