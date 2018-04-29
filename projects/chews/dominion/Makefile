@@ -55,9 +55,14 @@ unittestresults.out: unittest2.c unittest1.c dominion.o interface.o
 	#unittest4 >> unittestresults.out
 	#gcov -b dominion.c >> unittestresults.out
 	
-	echo "cardtest1.c:" >> unittestresults.out
-	gcc -o cardtest1 cardtest1.c -g dominion.o rngs.o interface.o $(CFLAGS)
-	cardtest1 >> unittestresults.out
+	#echo "cardtest1.c:" >> unittestresults.out
+	#gcc -o cardtest1 cardtest1.c -g dominion.o rngs.o interface.o $(CFLAGS)
+	#cardtest1 >> unittestresults.out
+	#gcov -b dominion.c >> unittestresults.out
+	
+	echo "cardtest2.c:" >> unittestresults.out
+	gcc -o cardtest2 cardtest2.c -g dominion.o rngs.o interface.o $(CFLAGS)
+	cardtest2 >> unittestresults.out
 	gcov -b dominion.c >> unittestresults.out
 	
 	cat unittestresults.out
@@ -71,4 +76,4 @@ all: playdom player
 clean:
 	rm -f *.o *.gcov *.gcda *.gcno *.so *.out
 	rm -f playdom playdom.exe player player.exe testDrawCard testDrawCard.exe
-	rm -f unittest1 unittest2 unittest3 unittest4 cardtest1
+	rm -f unittest1 unittest2 unittest3 unittest4 cardtest1 cardtest2
