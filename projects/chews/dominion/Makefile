@@ -35,24 +35,29 @@ unittestresults.out: unittest2.c unittest1.c dominion.o interface.o
 	echo "-------------------------------" >> unittestresults.out
 	echo "Assignment-3 Unit Tests Results" >> unittestresults.out
 	
-	echo "unittest1.c:" >> unittestresults.out
-	gcc -o unittest1 unittest1.c -g dominion.o rngs.o interface.o $(CFLAGS)
-	unittest1 >> unittestresults.out
-	gcov dominion.c >> unittestresults.out
+	#echo "unittest1.c:" >> unittestresults.out
+	#gcc -o unittest1 unittest1.c -g dominion.o rngs.o interface.o $(CFLAGS)
+	#unittest1 >> unittestresults.out
+	#gcov -b dominion.c >> unittestresults.out
 	
-	echo "unittest2.c:" >> unittestresults.out
-	gcc -o unittest2 unittest2.c -g dominion.o rngs.o interface.o $(CFLAGS)
-	unittest2 >> unittestresults.out
-	gcov dominion.c >> unittestresults.out
+	#echo "unittest2.c:" >> unittestresults.out
+	#gcc -o unittest2 unittest2.c -g dominion.o rngs.o interface.o $(CFLAGS)
+	#unittest2 >> unittestresults.out
+	#gcov -b dominion.c >> unittestresults.out
 	
-	echo "unittest3.c:" >> unittestresults.out
-	gcc -o unittest3 unittest3.c -g dominion.o rngs.o interface.o $(CFLAGS)
-	unittest3 >> unittestresults.out
-	gcov dominion.c >> unittestresults.out
+	#echo "unittest3.c:" >> unittestresults.out
+	#gcc -o unittest3 unittest3.c -g dominion.o rngs.o interface.o $(CFLAGS)
+	#unittest3 >> unittestresults.out
+	#gcov -b dominion.c >> unittestresults.out
 	
-	echo "unittest4.c:" >> unittestresults.out
-	gcc -o unittest4 unittest4.c -g dominion.o rngs.o interface.o $(CFLAGS)
-	unittest4 >> unittestresults.out
+	#echo "unittest4.c:" >> unittestresults.out
+	#gcc -o unittest4 unittest4.c -g dominion.o rngs.o interface.o $(CFLAGS)
+	#unittest4 >> unittestresults.out
+	#gcov -b dominion.c >> unittestresults.out
+	
+	echo "cardtest1.c:" >> unittestresults.out
+	gcc -o cardtest1 cardtest1.c -g dominion.o rngs.o interface.o $(CFLAGS)
+	cardtest1 >> unittestresults.out
 	gcov -b dominion.c >> unittestresults.out
 	
 	cat unittestresults.out
@@ -66,4 +71,4 @@ all: playdom player
 clean:
 	rm -f *.o *.gcov *.gcda *.gcno *.so *.out
 	rm -f playdom playdom.exe player player.exe testDrawCard testDrawCard.exe
-	rm -f unittest1 unittest2 unittest3 unittest4
+	rm -f unittest1 unittest2 unittest3 unittest4 cardtest1
