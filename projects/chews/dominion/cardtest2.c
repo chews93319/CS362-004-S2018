@@ -32,7 +32,7 @@ void printCardSet(int player, struct gameState* g);
 
 
 /*
- * Unit Test for Function: smithy
+ * Unit Test for Function: adventurer
  */
 int main(int argc, char** argv) {
     int newCards = 0;
