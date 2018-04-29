@@ -42,8 +42,7 @@ int main(int argc, char** argv) {
     //int shuffledCards = 0;
     
     
-    //int i;
-    int p;
+    int i;
     int r;
     int handpos = 0;
     int choice1 = 0;
@@ -54,7 +53,8 @@ int main(int argc, char** argv) {
     int seed = 1000;
     int numPlayer = 2;
     struct gameState G, testG;
-    int optCard, optDest, who;
+    int optCard, who;
+    char name[MAX_STRING_LENGTH];
     
     int k[10] = {adventurer, council_room, feast, gardens, mine,
                 remodel, smithy, village, baron, great_hall};
@@ -73,26 +73,31 @@ int main(int argc, char** argv) {
     //}
 #endif
     
+    // ---------- Test 1: cards added to 'top' of deck -------------
+    
     // initialize a new game
     r = initializeGame(numPlayer, k, seed, &G);
     if (r!=0){
         return -1;
     }
     
-    
     // prepare the playing hand
-    //    gainCard destination options
-    //      optDest = 0 : add to discard
-    //      optDest = 1 : add to deck
-    //      optDest = 2 : add to hand
+    //    append lastpos hand card to 'top' of deck
+    //    convert lastpos hand card to adventurer
     who = 0;
     optCard = adventurer;
-    optDest = 2;
     G.deck[who][G.deckCount[who]++] = G.hand[who][G.handCount[who]-1];
     G.hand[who][G.handCount[who]-1] = optCard;
     
-//    printCardSet(who, &G);
-//    printf("handCount:%d",G.handCount[who]);
+    // prepare the deck
+    //     silver, gold, adventurer, council_room
+    
+    for (i=0;i<4;i++){
+        G.deck[who][G.deckCount[who]++] = silver + i;
+    }
+    
+    printf(" Test Initialized: \n");
+    printCardSet(who, &G);
     
     
     // copy the game state to a test case
@@ -102,12 +107,22 @@ int main(int argc, char** argv) {
     handpos = G.handCount[who]-1;
     cardEffect(optCard, choice1, choice2, choice3, &testG, handpos, &bonus);
     
-    int i;
+    // calculate the number of cards that would:
+    //    move from deck to hand
+    //    move from deck to discard
+    printf("Manually Process cardEffect from control Game\n");
     i = G.deckCount[who]-1;
+    newCards = 0;
+    discarded = 0;
+    extraCoins = 0;
     do{
+        cardNumToName(G.deck[who][i], name);
         if((G.deck[who][i]==copper)||(G.deck[who][i]==silver)||(G.deck[who][i]==gold)){
+            printf("draw to hand a %s\n",name);
             newCards++;
+            extraCoins += G.deck[who][i] - 3;
         } else {
+            printf("draw to discard a %s\n",name);
             discarded++;
         }
         
@@ -116,50 +131,50 @@ int main(int argc, char** argv) {
     
     
     played = 1;
+    printf("\n\n");
+    
+    
+    
+    printf(" >> Evaluate Assert Test Set 1 << \n");
     
     //playedCardCount + 1
-    if(asserttrue(testG.playedCardCount, G.playedCardCount + played)){
-        failqty++;
-        #if (CARD2 == 1)
-        printf("played count = %d, expected = %d\n", testG.playedCardCount, G.playedCardCount + played);
-        #endif
-    }
+    #if (CARD2 == 1)
+    printf("test played count = %d, expected = %d\n", testG.playedCardCount, G.playedCardCount + played);
+    #endif
+    failqty += asserttrue(testG.playedCardCount, G.playedCardCount + played);
     
     //handCount + 2   (orig - 1 + 3)
-    if(asserttrue(testG.handCount[who], G.handCount[who] + newCards - played)){
-        failqty++;
-        #if (CARD2 == 1)
-        printf("hand count = %d, expected = %d\n", testG.handCount[who], G.handCount[who] + newCards - played);
-        #endif
-    }
+    #if (CARD2 == 1)
+    printf("test hand count = %d, expected = %d\n", testG.handCount[who], G.handCount[who] + newCards - played);
+    #endif
+    failqty+=asserttrue(testG.handCount[who], G.handCount[who] + newCards - played);
     
     //deckCount - newCards - discarded
-    if(asserttrue(testG.deckCount[who], G.deckCount[who] - newCards - discarded)){
-        failqty++;
-        #if (CARD2 == 1)
-        printf("deck count = %d, expected = %d\n", testG.deckCount[who], G.deckCount[who] - newCards - discarded);
-        #endif
-    }
+    //printf("deckCount calc: %d - %d - %d = %d\n",G.deckCount[who],newCards, discarded,G.deckCount[who] - newCards - discarded);
+    #if (CARD2 == 1)
+    printf("test deck count = %d, expected = %d\n", testG.deckCount[who], G.deckCount[who] - newCards - discarded);
+    #endif
+    failqty += asserttrue(testG.deckCount[who], G.deckCount[who] - newCards - discarded);
     
     //discardCount + discarded
-    if(asserttrue(testG.discardCount[who], G.discardCount[who] + discarded)){
-        failqty++;
-        #if (CARD2 == 1)
-        printf("deck count = %d, expected = %d\n", testG.discardCount[who], G.discardCount[who] + discarded);
-        #endif
-    }
+    #if (CARD2 == 1)
+    printf("test discard count = %d, expected = %d\n", testG.discardCount[who], G.discardCount[who] + discarded);
+    #endif
+    failqty+=asserttrue(testG.discardCount[who], G.discardCount[who] + discarded);
     
     //testG.numActions = G.numActions - 1
-    if(asserttrue(testG.numActions, G.numActions - played)){
-        failqty++;
-        #if (CARD2 == 1)
-        printf("numActions = %d, expected = %d\n", testG.numActions, G.numActions - played);
-        #endif
-    }
+    #if (CARD2 == 1)
+    printf("test numActions = %d, expected = %d\n", testG.numActions, G.numActions - played);
+    #endif
+    failqty+=asserttrue(testG.numActions, G.numActions - played);
     
     
     //if draw[] contains treasure cards, then extracoins = qty
     //   testGame.coins = Game.coins + extracoins
+    #if (CARD2 == 1)
+    printf("test coins = %d, expected = %d\n", testG.coins, G.coins + extraCoins);
+    #endif
+    failqty+=asserttrue(testG.coins, G.coins + extraCoins);
     
     
     
@@ -169,11 +184,15 @@ int main(int argc, char** argv) {
 #if (CARD2 == 1)
     printf("\n\n");
     
+    printf("Test Game Cardset\n");
     printCardSet(who, &testG);
     
-    for (p=0;p<numPlayer;p++){
-        printCardSet(p, &G);
-    }
+    printf("Seed Game Cardsets\n");
+    printCardSet(who, &G);
+    //for (p=0;p<numPlayer;p++){
+    //    printCardSet(p, &G);
+    //}
+    
 #endif
     
     if (failqty > 0){
@@ -208,7 +227,7 @@ int asserttrue(int lefty, int righty) {
 void printCardSet(int player, struct gameState* g) {
     
     int i;
-    int deckqty, handqty, discardqty;
+    int deckqty, handqty, discardqty, playqty;
     char name[MAX_STRING_LENGTH];
     
     printf("\nplayer%d Deck:\n",player);
@@ -227,6 +246,12 @@ void printCardSet(int player, struct gameState* g) {
     discardqty = g->discardCount[player];
     for (i=0;i<discardqty;i++){
         cardNumToName(g->discard[player][i], name);
+        printf("%s, ",name);
+    }
+    printf("\nplayer%d Played:\n",player);
+    playqty = g->playedCardCount;
+    for (i=0;i<playqty;i++){
+        cardNumToName(g->playedCards[i], name);
         printf("%s, ",name);
     }
     printf("\n\n");
