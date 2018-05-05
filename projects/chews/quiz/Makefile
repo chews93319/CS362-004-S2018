@@ -8,6 +8,11 @@ testme: testme.o
 
 all: testme
 
+runtests: testme
+	./testme &> randomquiz.out
+	gcov testme.c >> randomquiz.out
+	cat testme.c.gcov >> randomquiz.out
+
 clean:
 	rm -f *.o testme *.gcov *.gcda *.gcno *.so *.out
 
