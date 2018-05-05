@@ -88,7 +88,7 @@ void testme()
       
       now = time(NULL);
       seconds = difftime(now, start);
-	} while (seconds < 29.5);
+	} while (seconds < 295);
 }
 
 int main(int argc, char *argv[])
