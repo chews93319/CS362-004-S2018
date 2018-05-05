@@ -19,31 +19,22 @@ char *inputString()
 {
 	char c;
 	char* source = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-	int r, i, p;
+	int r, i, q;
 	char* s;
 	
-    p = 0;
-	//p = random() % 5;
+	q = 5 - ((random() % 3) % 2) + ((random() % 3) % 2);
 	r = random() % 52;
 	s = (char*) malloc(6*sizeof(char));
 	
-    /*
-    s[0] = 'r';
-    s[1] = 'e';
-    s[2] = 's';
-    s[3] = 'e';
-    s[4] = 't';
-    s[5] = '\0';
-    */
-    
-	for (i=4; i >= p; i--)
+	
+	for (i=0; i < q; i++)
 	{
 		r = random() % 26;
 		c = source[r];
 		s[i]=c;
 	}
 	
-	s[5] = '\0';
+	s[q] = '\0';
 	
 	return s;
 }
@@ -54,12 +45,12 @@ void testme()
 	char *s;
 	char c;
 	int state = 0;
-    time_t start;
-    time_t now;
-    double seconds = 0;
+	time_t start;
+	time_t now;
+	double seconds = 0;
     
-    time(&start);  /* get current time; same as: start = time(NULL)   */
-    /* reference: http://www.cplusplus.com/reference/ctime/difftime/  */
+	time(&start);  /* get current time; same as: start = time(NULL)   */
+	/* reference: http://www.cplusplus.com/reference/ctime/difftime/  */
     
 	do
 	{
@@ -86,9 +77,13 @@ void testme()
 	    exit(200);
 	  }
       
-      now = time(NULL);
-      seconds = difftime(now, start);
+	  now = time(NULL);
+	  seconds = difftime(now, start);
 	} while (seconds < 295);
+	
+	printf("error\n");
+	exit(200);
+
 }
 
 int main(int argc, char *argv[])
