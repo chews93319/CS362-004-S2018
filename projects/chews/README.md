@@ -1,6 +1,5 @@
-This is my assignment-3 submission!
+This is my assignment-4 submission!
 
 Tasks:
-  - Create qty.4 unit test implementations for functions other than cardEffect
-  - Create qty.4 card test implementations for unique cases of cardEffect (and refactored functions)
+  - Create qty.3 random test generator implementations for unique cases of cardEffect (and refactored functions)
 
