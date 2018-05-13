@@ -30,7 +30,27 @@ runtests: testDrawCard
 	gcov dominion.c >> unittestresult.out
 	cat dominion.c.gcov >> unittestresult.out
 
-unittestresults.out: unittest2.c unittest1.c dominion.o interface.o
+randomtestresults.out: randomtestcard1.c dominion.o interface.o #randomtestcard3.c randomtestcard2.c
+	echo "   CS362 Spring 2018: Chews" > randomtestresults.out
+	echo "-------------------------------" >> randomtestresults.out
+	echo "Assignment-4 Random Tests Results" >> randomtestresults.out
+	
+	echo "randomtestcard1.c:" >> randomtestresults.out
+	gcc -o randomtestcard1 randomtestcard1.c -g dominion.o rngs.o interface.o $(CFLAGS)
+	randomtestcard1 >> randomtestresults.out
+	gcov -b dominion.c >> randomtestresults.out
+	
+	#echo "randomtestcard2.c:" >> randomtestresults.out
+	#gcc -o randomtestcard2 randomtestcard2.c -g dominion.o rngs.o interface.o $(CFLAGS)
+	#randomtestcard2 >> randomtestresults.out
+	#gcov -b dominion.c >> randomtestresults.out
+	
+	#echo "randomtestcard3.c:" >> randomtestresults.out
+	#gcc -o randomtestcard3 randomtestcard3.c -g dominion.o rngs.o interface.o $(CFLAGS)
+	#randomtestcard3 >> randomtestresults.out
+	#gcov -b dominion.c >> randomtestresults.out
+
+unittestresults.out: cardtest4.c cardtest3.c cardtest2.c cardtest1.c unittest4.c unittest3.c unittest2.c unittest1.c dominion.o interface.o
 	echo "   CS362 Spring 2018: Chews" > unittestresults.out
 	echo "-------------------------------" >> unittestresults.out
 	echo "Assignment-3 Unit Tests Results" >> unittestresults.out
@@ -88,3 +108,4 @@ clean:
 	rm -f playdom playdom.exe player player.exe testDrawCard testDrawCard.exe
 	rm -f unittest1 unittest2 unittest3 unittest4
 	rm -f cardtest1 cardtest2 cardtest3 cardtest4
+	rm -f randomtestcard1 randomtestcard2 randomtestcard3
