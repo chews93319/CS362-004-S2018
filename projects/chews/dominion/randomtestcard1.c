@@ -19,7 +19,7 @@
 
 //set CARD1 to 0 to remove printfs from output
 #define RNDCARD1 1
-#define STCRND1  6
+#define STCRND1  0
   //       1    print G state startup info
   //       2    printCardSet(G) prior to clone
   //       4    printCardSet(testG) after cardEffect
@@ -33,7 +33,7 @@
 #define SUPPLYSIZE  17
 
 //function prototypes
-int assertEQ(int lefty, int righty);
+int assertEQ(char *prefix, int lefty, int righty);
 void printSupplySet(struct gameState* g);
 void printCardSet(int player, struct gameState* g);
 void randtest1(void);
@@ -84,9 +84,10 @@ void randtest1(void){
     //int remove1, remove2;
     int seed = 1000;
     int numPlayer;
-    struct gameState G, testG;
+    struct gameState G, cntlG,testG;
     int optCard;
     char name[MAX_STRING_LENGTH];
+    char msg[MAX_STRING_LENGTH];
     
     int k[10] = {adventurer, council_room, feast, gardens, mine,
                 remodel, smithy, village, baron, great_hall};
@@ -102,9 +103,6 @@ void randtest1(void){
     
     
     
-    #if (RNDCARD1 == 1)
-    printf("----------------- Testing Card: %s ----------------\n", TESTCARD);
-    #endif
     
     
     time(&start);  //get current time; same as: start = time(NULL)
@@ -112,6 +110,9 @@ void randtest1(void){
     do {
         //increment test iteration quantity
         tcCount++;
+        //#if (RNDCARD1 == 1)
+        printf("------------ Testing Card: %s ----- Iteration: %5d ----------------\n", TESTCARD, tcCount);
+        //#endif
         
         //reset test operating variables
         failqty = 0;
@@ -191,9 +192,6 @@ void randtest1(void){
             G.discard[activePlayer][G.discardCount[activePlayer]++] = optCard;
         }
         
-        #if (STCRND1 && 2)
-        printCardSet(activePlayer, &G);
-        #endif
         
         G.whoseTurn = activePlayer;
         G.numActions = 1;
@@ -202,14 +200,12 @@ void randtest1(void){
         
         // copy the game state to a test case
         memcpy(&testG, &G, sizeof(struct gameState));
+        memcpy(&cntlG, &G, sizeof(struct gameState));
         
         // call cardEffect of TESTCARD within test Game
         optCard = adventurer;
         cardEffect(optCard, choice1, choice2, choice3, &testG, handpos, &bonus);
         
-        #if (STCRND1 && 4)
-        printCardSet(activePlayer, &testG);
-        #endif
         
         
         // manually update control Game state
@@ -220,36 +216,89 @@ void randtest1(void){
         newCards = 0;
         discarded = 0;
         extraCoins = 0;
+        int temphand[MAX_HAND];
+        
         do {
-            cardNumToName(G.deck[activePlayer][i], name);
-            if((G.deck[activePlayer][i]==copper)||(G.deck[activePlayer][i]==silver)||(G.deck[activePlayer][i]==gold)){
+            cardNumToName(cntlG.deck[activePlayer][i], name);
+            if((cntlG.deck[activePlayer][i]==copper)||(cntlG.deck[activePlayer][i]==silver)||(cntlG.deck[activePlayer][i]==gold)){
+                #if (STCRND1 && 4)
                 printf("draw to hand a %s\n",name);
+                #endif
                 newCards++;
-                extraCoins += G.deck[activePlayer][i] - 3;
+                extraCoins += cntlG.deck[activePlayer][i] - 3;
+                cntlG.hand[activePlayer][cntlG.handCount[activePlayer]++] = cntlG.deck[activePlayer][i];
             } else {
+                #if (STCRND1 && 4)
                 printf("draw to discard a %s\n",name);
+                #endif
+                
+                temphand[discarded] = cntlG.deck[activePlayer][i];
                 discarded++;
+                //cntlG.discard[activePlayer][cntlG.discardCount[activePlayer]++] = cntlG.deck[activePlayer][i];
             }
+            
+            //remove the card from 'top of deck' and decrement deckCount
+            cntlG.deck[activePlayer][cntlG.deckCount[activePlayer]--] = -1;
             
             i--;
             
         } while ((i>=0) && (newCards<2));
         
-        
+        for (i=discarded;i > 0;i--){
+            cntlG.discard[activePlayer][cntlG.discardCount[activePlayer]++] = temphand[i-1];
+            temphand[i-1] = -1;
+        }
+                
         played = 1;
+        
+        
+        //playedCardCount + 1
+        sprintf(msg, "Test Played (card) Count");
+        failqty += assertEQ(msg, testG.playedCardCount, G.playedCardCount + played);
+        
+        //handCount + 2   (orig - 1 + 3)
+        sprintf(msg, "Test Hand (card) Count");
+        failqty += assertEQ(msg, testG.handCount[activePlayer], G.handCount[activePlayer] + newCards - played);
+        
+        //deckCount - newCards - discarded
+        sprintf(msg, "Test Deck (card) Count");
+        failqty += assertEQ(msg, testG.deckCount[activePlayer], G.deckCount[activePlayer] - newCards - discarded);
+        
+        //discardCount + discarded
+        sprintf(msg, "Test Discard (card) Count");
+        failqty += assertEQ(msg, testG.discardCount[activePlayer], G.discardCount[activePlayer] + discarded);
+        
+        //numActions - played
+        sprintf(msg, "Test Action Count");
+        failqty += assertEQ(msg, testG.numActions, G.numActions - played);
+        
+        //if draw[] contains treasure cards, then extracoins = qty
+        //   testGame.coins = Game.coins + extracoins
+        sprintf(msg, "Test Total Coin Value");
+        failqty += assertEQ(msg, testG.coins, G.coins + extraCoins);
+        
+        
+        
+        #if (RNDCARD1 == 1)
+        if (failqty > 0){
+            printf("\n");
+            printf("   ---  Initial GameState  ---   \n");
+            printCardSet(activePlayer, &G);
+            //printf("   ---  Control GameState  ---   \n");
+            //printCardSet(activePlayer, &cntlG);
+            printf("  ---  Experiment GameState  ---   \n");
+            printCardSet(activePlayer, &testG);
+        }
+        #endif
+        
         printf("\n\n");
-        
-        
-        
-        
-        
-        
-        
-        
         
         now = time(NULL);
         seconds = difftime(now, start);
-    } while (tcCount < 8);//(seconds < 295);
+    } while (tcCount < 18);//(seconds < 295);
+    
+    
+    
     
 }
 
@@ -257,14 +306,14 @@ void randtest1(void){
 /*
  *
  */
-int assertEQ(int lefty, int righty) {
+int assertEQ(char *prefix, int lefty, int righty) {
     if (lefty != righty){
-#if (CARD1 == 1)
-        printf("-->  Assert EQUAL Failed:  %d != %d\n", lefty, righty);
-#endif
+//#if (RNDCARD1 == 1)
+        printf("%s -->  Assert EQUAL Failed:  %d != %d\n", prefix, lefty, righty);
+//#endif
+        memset(prefix,'\0',MAX_STRING_LENGTH);
         return 1;
     }
-    
     return 0;
 }
 
@@ -277,19 +326,19 @@ void printCardSet(int player, struct gameState* g) {
     int deckqty, handqty, discardqty;
     char name[MAX_STRING_LENGTH];
     
-    printf("\nplayer%d Hand(%d)($%d):\n",player, g->handCount[player],g->coins);
+    printf("\nplayer%d Hand(%d)($%d): ",player, g->handCount[player],g->coins);
     handqty = g->handCount[player];
     for (i=0;i<handqty;i++){
         cardNumToName(g->hand[player][i], name);
         printf("%s, ",name);
     }
-    printf("\nplayer%d Deck(%d):\n",player, g->deckCount[player]);
+    printf("\nplayer%d Deck(%d): ",player, g->deckCount[player]);
     deckqty = g->deckCount[player];
     for (i=0;i<deckqty;i++){
         cardNumToName(g->deck[player][i], name);
         printf("%s, ",name);
     }
-    printf("\nplayer%d Discard(%d):\n",player, g->discardCount[player]);
+    printf("\nplayer%d Discard(%d): ",player, g->discardCount[player]);
     discardqty = g->discardCount[player];
     for (i=0;i<discardqty;i++){
         cardNumToName(g->discard[player][i], name);
@@ -339,7 +388,7 @@ void testRNGS(void){
     //double u;
     
     
-    for (i; i < 10000; i++){
+    for(i=0;i < 10000;i++){
         //u = 3 * Random();
         //test = (int) u;
         //test = test % 3;
