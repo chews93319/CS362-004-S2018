@@ -295,7 +295,7 @@ void randtest1(void){
         
         now = time(NULL);
         seconds = difftime(now, start);
-    } while (tcCount < 18);//(seconds < 295);
+    } while (tcCount < 50);//(seconds < 295);
     
     
     
