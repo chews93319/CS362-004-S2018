@@ -19,7 +19,7 @@
 
 //set RNDCARD2 to 0 to remove printfs from output
 #define RNDCARD2 1
-#define STCRND1  1
+#define STCRND2  1
   //       1    print G state startup info
   //       2    unused
   //       4    unused
@@ -133,7 +133,7 @@ void randtest2(void){
         bonus = 0;
         // generate a random quantity of players 2,3,4
         numPlayer = 2 + myRand(3);
-        #if (STCRND1 & 1)
+        #if (STCRND2 & 1)
         printf("player qty:%d\n",numPlayer);
         #endif
         
@@ -158,7 +158,7 @@ void randtest2(void){
         startDiscardQty = 1 + myRand(MOSTDISCARD);
         
         
-        #if (STCRND1 & 1)
+        #if (STCRND2 & 1)
         printf("active player:%d\n",activePlayer);
         printf("testcard handpos:%d\n",handpos);
         printf("HandQty:%d, DeckQty:%d, DiscardQty:%d\n",startHandQty,startDeckQty,startDiscardQty);
@@ -275,10 +275,19 @@ void randtest2(void){
         
         now = time(NULL);
         seconds = difftime(now, start);
-    } while (tcCount < 50);//(seconds < 295);
+    } while (tcCount < 100);
+    //} while (seconds < 1);  //~18000 iterations run per second
     
     
     
+    now = time(NULL);
+    seconds = difftime(now, start);
+    
+    printf("----------------------------------------\n"
+            " Completed Random Testing of %s Card \n"
+            "     Iterations: %5d   Time: %.f secs\n"
+            "---------------------------------------\n",
+            TESTCARD, tcCount, seconds);
 }
 
 
