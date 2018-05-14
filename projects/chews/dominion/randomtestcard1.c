@@ -295,11 +295,19 @@ void randtest1(void){
         
         now = time(NULL);
         seconds = difftime(now, start);
-    } while (tcCount < 50);//(seconds < 295);
+    } while (tcCount < 100);
+    //} while (seconds < 1);  //~18000 iterations run per second
     
     
     
+    now = time(NULL);
+    seconds = difftime(now, start);
     
+    printf("----------------------------------------\n"
+            " Completed Random Testing of %s Card \n"
+            "     Iterations: %5d   Time: %.f secs\n"
+            "---------------------------------------\n",
+            TESTCARD, tcCount, seconds);
 }
 
 
