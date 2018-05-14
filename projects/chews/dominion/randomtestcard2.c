@@ -19,10 +19,10 @@
 
 //set RNDCARD2 to 0 to remove printfs from output
 #define RNDCARD2 1
-#define STCRND1  6
+#define STCRND1  1
   //       1    print G state startup info
-  //       2    printCardSet(G) prior to clone
-  //       4    printCardSet(testG) after cardEffect
+  //       2    unused
+  //       4    unused
 
 
 #define TESTCARD "village"
@@ -69,6 +69,7 @@ void randtest2(void){
     int newDraw = 0;
     int newCards = 0;
     int newBuys = 0;
+    int newActions = 0;
     int played = 1;
     int discarded = 0;
     int extraCoins = 0;
@@ -122,7 +123,7 @@ void randtest2(void){
         newDraw = 0;
         newCards = 0;
         newBuys = 0;
-        played = 1;
+        newActions = 0;
         //extraCoins = 0;
         //shuffledCards = 0;
         handpos = 0;
@@ -132,7 +133,7 @@ void randtest2(void){
         bonus = 0;
         // generate a random quantity of players 2,3,4
         numPlayer = 2 + myRand(3);
-        #if (STCRND1 && 1)
+        #if (STCRND1 & 1)
         printf("player qty:%d\n",numPlayer);
         #endif
         
@@ -157,7 +158,7 @@ void randtest2(void){
         startDiscardQty = 1 + myRand(MOSTDISCARD);
         
         
-        #if (STCRND1 && 1)
+        #if (STCRND1 & 1)
         printf("active player:%d\n",activePlayer);
         printf("testcard handpos:%d\n",handpos);
         printf("HandQty:%d, DeckQty:%d, DiscardQty:%d\n",startHandQty,startDeckQty,startDiscardQty);
@@ -208,6 +209,18 @@ void randtest2(void){
         cardEffect(optCard, choice1, choice2, choice3, &testG, handpos, &bonus);
         
         
+        played = 1;
+        newCards = 1;
+        newActions = 2;
+        if((G.deck[activePlayer][G.deckCount[activePlayer]-1]==copper) ||
+                (G.deck[activePlayer][G.deckCount[activePlayer]-1]==silver) ||
+                (G.deck[activePlayer][G.deckCount[activePlayer]-1]==gold)){
+            extraCoins += G.deck[activePlayer][G.deckCount[activePlayer]-1] - 3;
+        } else {
+            extraCoins = 0;
+        }
+        
+        
         
     /* Evaluation of Assert Tests
         sprintf(msg, "");
@@ -228,7 +241,7 @@ void randtest2(void){
         
         //drawn card is from activeplayer
         sprintf(msg, "Test Drawn Card is from ActivePlayer Deck");
-        failqty += assertEQ(msg, testG.hand[activePlayer][testG.handCount[activePlayer]-1], G.deck[activePlayer][G.deckCount[who]-1]);
+        failqty += assertEQ(msg, testG.hand[activePlayer][testG.handCount[activePlayer]-1], G.deck[activePlayer][G.deckCount[activePlayer]-1]);
         
         //deckCount - newCard
         sprintf(msg, "Test Deck (card) Count");
@@ -240,13 +253,29 @@ void randtest2(void){
         
         //if draw[] contains treasure cards, then extracoins = qty
         //    testGame.coins = Game.coins + extracoins
+        sprintf(msg, "Test Total Coin Value");
+        failqty += assertEQ(msg, testG.coins, G.coins + extraCoins);
         
         
+        
+        #if (RNDCARD2 == 1)
+        if (failqty > 0){
+            printf("\n");
+            printf("   ---  Initial GameState  ---   \n");
+            printCardSet(activePlayer, &G);
+            //printf("   ---  Control GameState  ---   \n");
+            //printCardSet(activePlayer, &cntlG);
+            printf("  ---  Experiment GameState  ---   \n");
+            printCardSet(activePlayer, &testG);
+        }
+        #endif
+        
+        printf("\n\n");
         
         
         now = time(NULL);
         seconds = difftime(now, start);
-    } while (tcCount < 8);//(seconds < 295);
+    } while (tcCount < 50);//(seconds < 295);
     
     
     
