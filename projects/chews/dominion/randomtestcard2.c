@@ -18,8 +18,8 @@
 #include "interface.h"
 
 //set RNDCARD2 to 0 to remove printfs from output
-#define RNDCARD2 1
-#define STCRND2  1
+#define RNDCARD2 0
+#define STCRND2  0
   //       1    print G state startup info
   //       2    unused
   //       4    unused

@@ -30,7 +30,7 @@ runtests: testDrawCard
 	gcov dominion.c >> unittestresult.out
 	cat dominion.c.gcov >> unittestresult.out
 
-randomtestresults.out: randomtestcard1.c randomtestcard2.c dominion.o interface.o #randomtestcard3.c
+randomtestresults.out: randomtestcard1.c randomtestcard2.c randomtestcard3.c dominion.o interface.o #
 	echo "   CS362 Spring 2018: Chews" > randomtestresults.out
 	echo "-------------------------------" >> randomtestresults.out
 	echo "Assignment-4 Random Tests Results" >> randomtestresults.out
@@ -45,10 +45,10 @@ randomtestresults.out: randomtestcard1.c randomtestcard2.c dominion.o interface.
 	randomtestcard2 >> randomtestresults.out
 	gcov -b dominion.c >> randomtestresults.out
 	
-	#echo "randomtestcard3.c:" >> randomtestresults.out
-	#gcc -o randomtestcard3 randomtestcard3.c -g dominion.o rngs.o interface.o $(CFLAGS)
-	#randomtestcard3 >> randomtestresults.out
-	#gcov -b dominion.c >> randomtestresults.out
+	echo "randomtestcard3.c:" >> randomtestresults.out
+	gcc -o randomtestcard3 randomtestcard3.c -g dominion.o rngs.o interface.o $(CFLAGS)
+	randomtestcard3 >> randomtestresults.out
+	gcov -b dominion.c >> randomtestresults.out
 
 unittestresults.out: cardtest4.c cardtest3.c cardtest2.c cardtest1.c unittest4.c unittest3.c unittest2.c unittest1.c dominion.o interface.o
 	echo "   CS362 Spring 2018: Chews" > unittestresults.out

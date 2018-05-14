@@ -18,7 +18,7 @@
 #include "interface.h"
 
 //set CARD1 to 0 to remove printfs from output
-#define RNDCARD1 1
+#define RNDCARD1 0
 #define STCRND1  0
   //       1    print G state startup info
   //       2    printCardSet(G) prior to clone
