@@ -12,10 +12,4 @@ int getCost(int cardNumber);
 int cardEffect(int card, int choice1, int choice2, int choice3, 
 	       struct gameState *state, int handPos, int *bonus);
 
-void smithyEffect(int currPlayer, int currPos, struct gameState *state);
-void adventurerEffect(int currPlayer, int currPos, struct gameState *state);
-void councilroomEffect(int currPlayer, int currPos, struct gameState *state);
-void villageEffect(int currPlayer, int currPos, struct gameState *state);
-void stewardEffect(int currPlayer, int currPos, int c1, int c2, int c3, struct gameState *state);
-
 #endif

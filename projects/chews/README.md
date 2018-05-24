@@ -1,6 +1,8 @@
-This is my assignment-3 submission!
+This is my assignment-5 submission!
 
 Tasks:
-  - Create qty.4 unit test implementations for functions other than cardEffect
-  - Create qty.4 card test implementations for unique cases of cardEffect (and refactored functions)
+  -  Obtain a teammate's Refactored and Bugged code for testing: Nathan Breneman
+  -  Execute assignment-3 Card Unit Tests upon teammate's code
+  -  Execute assignment-4 Card Random Tests upon teammate's code
+  -  Repair at least one bug within the teammate's code
 
