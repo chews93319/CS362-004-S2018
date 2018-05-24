@@ -40,10 +40,10 @@ peertestresults.out: randomtestcard1.c randomtestcard2.c randomtestcard3.c domin
 	cardtest1 >> peertestresults.out
 	gcov -b dominion.c >> peertestresults.out
 	
-	#echo "cardtest2.c:" >> peertestresults.out
-	#gcc -o cardtest2 cardtest2.c -g dominion.o rngs.o interface.o $(CFLAGS)
-	#cardtest2 >> peertestresults.out
-	#gcov -b dominion.c >> peertestresults.out
+	echo "cardtest2.c:" >> peertestresults.out
+	gcc -o cardtest2 cardtest2.c -g dominion.o rngs.o interface.o $(CFLAGS)
+	cardtest2 >> peertestresults.out
+	gcov -b dominion.c >> peertestresults.out
 	
 	#echo "cardtest3.c:" >> peertestresults.out
 	#gcc -o cardtest3 cardtest3.c -g dominion.o rngs.o interface.o $(CFLAGS)
