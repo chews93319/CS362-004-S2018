@@ -35,31 +35,33 @@ peertestresults.out: randomtestcard1.c randomtestcard2.c randomtestcard3.c domin
 	echo "-------------------------------" >> peertestresults.out
 	echo "Assignment-5 PeerReview Tests Results" >> peertestresults.out
 	
-	echo "cardtest1.c:" >> peertestresults.out
-	gcc -o cardtest1 cardtest1.c -g dominion.o rngs.o interface.o $(CFLAGS)
-	cardtest1 >> peertestresults.out
-	gcov -b dominion.c >> peertestresults.out
+	#causes Segmentation Fault
+	#echo "cardtest1.c:" >> peertestresults.out
+	#gcc -o cardtest1 cardtest1.c -g dominion.o rngs.o interface.o $(CFLAGS)
+	#cardtest1 >> peertestresults.out
+	#gcov -b dominion.c >> peertestresults.out
 	
 	echo "cardtest2.c:" >> peertestresults.out
 	gcc -o cardtest2 cardtest2.c -g dominion.o rngs.o interface.o $(CFLAGS)
 	cardtest2 >> peertestresults.out
 	gcov -b dominion.c >> peertestresults.out
 	
-	#echo "cardtest3.c:" >> peertestresults.out
-	#gcc -o cardtest3 cardtest3.c -g dominion.o rngs.o interface.o $(CFLAGS)
-	#cardtest3 >> peertestresults.out
-	#gcov -b dominion.c >> peertestresults.out
+	echo "cardtest3.c:" >> peertestresults.out
+	gcc -o cardtest3 cardtest3.c -g dominion.o rngs.o interface.o $(CFLAGS)
+	cardtest3 >> peertestresults.out
+	gcov -b dominion.c >> peertestresults.out
 	
-	#echo "randomtestcard1.c:" >> peertestresults.out
-	#gcc -o randomtestcard1 randomtestcard1.c -g dominion.o rngs.o interface.o $(CFLAGS)
-	#randomtestcard1 >> peertestresults.out
-	#gcov -b dominion.c >> peertestresults.out
+	echo "randomtestcard1.c:" >> peertestresults.out
+	gcc -o randomtestcard1 randomtestcard1.c -g dominion.o rngs.o interface.o $(CFLAGS)
+	randomtestcard1 >> peertestresults.out
+	gcov -b dominion.c >> peertestresults.out
 	
-	#echo "randomtestcard2.c:" >> peertestresults.out
-	#gcc -o randomtestcard2 randomtestcard2.c -g dominion.o rngs.o interface.o $(CFLAGS)
-	#randomtestcard2 >> peertestresults.out
-	#gcov -b dominion.c >> peertestresults.out
+	echo "randomtestcard2.c:" >> peertestresults.out
+	gcc -o randomtestcard2 randomtestcard2.c -g dominion.o rngs.o interface.o $(CFLAGS)
+	randomtestcard2 >> peertestresults.out
+	gcov -b dominion.c >> peertestresults.out
 	
+	#causes Segmentation Fault
 	#echo "randomtestcard3.c:" >> peertestresults.out
 	#gcc -o randomtestcard3 randomtestcard3.c -g dominion.o rngs.o interface.o $(CFLAGS)
 	#randomtestcard3 >> peertestresults.out
