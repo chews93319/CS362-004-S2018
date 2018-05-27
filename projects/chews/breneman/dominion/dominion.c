@@ -643,13 +643,13 @@ int getCost(int cardNumber)
   return -1;
 }
 
-int adventurerEffect(struct gameState *state, int currentPlayer, int temphand[]) {
+int adventurerEffect(struct gameState *state, int currentPlayer, int handPos, int temphand[]) {
   int drawntreasure = 0;
   int cardDrawn;
   int z = 0; // this is the counter for the temp hand
 
   // INTENTIONAL BUG: draw 3 treasure cards
-  while(drawntreasure < 3) {
+  while(drawntreasure < 2) {
     // if the deck is empty we need to shuffle discard and add to deck
   	if (state->deckCount[currentPlayer] < 1) {
       shuffle(currentPlayer, state);
@@ -673,6 +673,9 @@ int adventurerEffect(struct gameState *state, int currentPlayer, int temphand[])
 	  state->discard[currentPlayer][state->discardCount[currentPlayer]++]=temphand[z-1];
     z=z-1;
   }
+
+  // discard card from hand
+  discardCard(handPos, currentPlayer, state, 0);
 
   return 0;
 }
@@ -759,7 +762,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
   switch( card )
     {
     case adventurer:
-      return adventurerEffect(state, currentPlayer, temphand);
+      return adventurerEffect(state, currentPlayer, handPos, temphand);
 
     case council_room:
       return councilRoomEffect(state, currentPlayer, handPos);
