@@ -50,6 +50,11 @@ randomtestresults.out: randomtestcard1.c randomtestcard2.c randomtestcard3.c dom
 	randomtestcard3 >> randomtestresults.out
 	gcov -b dominion.c >> randomtestresults.out
 
+tarantulatest: tarantulaScore.c dominion.o interface.o rngs.o
+	gcc -o tarantulaScore tarantulaScore.c -g dominion.o rngs.o interface.o $(CFLAGS)
+	tarantulaScore
+	gcov dominion.c
+
 unittestresults.out: cardtest4.c cardtest3.c cardtest2.c cardtest1.c unittest4.c unittest3.c unittest2.c unittest1.c dominion.o interface.o
 	echo "   CS362 Spring 2018: Chews" > unittestresults.out
 	echo "-------------------------------" >> unittestresults.out
@@ -109,3 +114,4 @@ clean:
 	rm -f unittest1 unittest2 unittest3 unittest4
 	rm -f cardtest1 cardtest2 cardtest3 cardtest4
 	rm -f randomtestcard1 randomtestcard2 randomtestcard3
+	rm -f tarantulaScore
