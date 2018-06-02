@@ -77,7 +77,7 @@ int main(int argc, char** argv) {
     
     int optCard;
     int optPile;
-    int pScore;
+    int pScore = 0;
     char name[MAX_STRING_LENGTH];
     // estate = 1
     // duchy = 2
@@ -99,11 +99,21 @@ int main(int argc, char** argv) {
         }
     }
     
+    int testType;
+    int cardQty;
     
-    int testType = (rand() % 100) % 4;  //printf("testType:%d\n",testType);
+    if (argc != 1){
+        if (atoi(argv[1]) == -1) {
+            testType = 0;
+            cardQty = 1;
+        }
+    } else {
+        testType = (rand() % 100) % 4;  //printf("testType:%d\n",testType);
+        cardQty = rand() % 10;
+    }
+    
     int cardIndex;
-    int cardQty = rand() % 10;
-    int expScore;
+    int expScore = 0;
     
     if (testType == 0){
         #if (NOISY == 1)

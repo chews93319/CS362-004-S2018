@@ -52,7 +52,7 @@ randomtestresults.out: randomtestcard1.c randomtestcard2.c randomtestcard3.c dom
 
 tarantulatest: tarantulaScore.c dominion.o interface.o rngs.o
 	gcc -o tarantulaScore tarantulaScore.c -g dominion.o rngs.o interface.o $(CFLAGS)
-	tarantulaScore
+	tarantulaScore -1
 	gcov dominion.c
 
 unittestresults.out: cardtest4.c cardtest3.c cardtest2.c cardtest1.c unittest4.c unittest3.c unittest2.c unittest1.c dominion.o interface.o
