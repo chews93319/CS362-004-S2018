@@ -93,20 +93,27 @@ for testrun in xrange(0, qtyrun):
     results[i][myRet + 1] = results[i][3] + results[i][myRet + 1]
     results[i][3] = 0
     #print results[i]
-  
 
 
-print "Total Summary"
-print totalPass
-print totalFail
+for i in xrange(0,len(results)):
+  if (results[i][0] != 0):
+    results[i][3] = float(results[i][2]/totalFail) / (float(results[i][1]/totalPass)+float(results[i][2]/totalFail))
+    #print results[i]
 
-if ((totalPass > 0) & (totalFail > 0)):
-  for i in xrange(0,len(results)):
-    if (results[i][0] != 0):
-      #print results[i]
-      results[i][3] = float(results[i][2]/totalFail) / (float(results[i][1]/totalPass)+float(results[i][2]/totalFail))
-      print results[i]
-else:
-  print "Insufficient Pass/Fail Ratio. Repeat Tests"
+
+
+
+print ">>>  Report Summary  <<<"
+print "  TotalPass: {0}".format(int(totalPass))
+print "  TotalFail: {0}".format(int(totalFail))
+print "------------------------"
+
+
+for i in xrange(0,len(results)):
+  if (results[i][0] != 0):
+    print "Line {0}:\t {1:0.2f}%".format(results[i][0],results[i][3])
+
+
+
 
 
