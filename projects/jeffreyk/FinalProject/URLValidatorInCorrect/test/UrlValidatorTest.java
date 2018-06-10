@@ -11,20 +11,20 @@ import java.util.Random;
 public class UrlValidatorTest extends TestCase {
 	static String[] valid = {"http://www.google.com",
 			"ftp://123.32.0.193",
-			"0.0.0.0/t123",
-			"255.com/test1",
-			"https://john.doe@www.example.com:123/forum/questions/?tag=networking&order=newest#top",
-			"ldap://[2001:db8::7]/c=GB?objectClass?one",
-			"mailto:John.Doe@example.com",
-			"news:comp.infosystems.www.servers.unix",
-			"tel:+1-816-555-1212",
-			"telnet://192.0.2.16:80/",
-			"urn:oasis:names:specification:docbook:dtd:xml:4.1.2"};
+			"https://john.doe@www.example.com:123/forum/questions/?tag=networking&order=newest#top"};
 	static String[] invalid = {"http:///w.google",
 			"://1.2.3.4.5:80",
 			"http://255.com:-1/test1",
 			"ftp://go.com:65a/../",
 			":80/t23",
+			"0.0.0.0/t123",
+			"255.com/test1",
+			"urn:oasis:names:specification:docbook:dtd:xml:4.1.2",
+			"ldap://[2001:db8::7]/c=GB?objectClass?one",
+			"mailto:John.Doe@example.com",
+			"news:comp.infosystems.www.servers.unix",
+			"tel:+1-816-555-1212",
+			"telnet://192.0.2.16:80/",
 			""};
 	static String[] schemes = {"http://", "ftp:", "", "http/", "ftp", "://", "h3t"};
 	static String[] authorities = {"www.go.com", "1.2.3.4.", "www.google.com", "", "193.36.128.43", "err", "john.doe@www.example.com"};
@@ -42,11 +42,11 @@ public class UrlValidatorTest extends TestCase {
 	   UrlValidator urlVal = new UrlValidator(null, null, 0);
 	   
 	   for(int i = 0; i < valid.length; i++) {
-		   assertEquals(String.format("Fail valid case:%s",valid[i]),urlVal.isValid(valid[i]),true);
+		   assertEquals(String.format("Fail valid case:%s",valid[i]),true,urlVal.isValid(valid[i]));
 	   }
 	   
 	   for(int i = 0; i < invalid.length; i++) {
-		   assertEquals(String.format("Fail invalid case:%s",invalid[i]),urlVal.isValid(invalid[i]),false);
+		   assertEquals(String.format("Fail invalid case:%s",invalid[i]),false,urlVal.isValid(invalid[i]));
 	   }
 	   
    }
